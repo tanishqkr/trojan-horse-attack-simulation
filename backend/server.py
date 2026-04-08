@@ -48,5 +48,7 @@ def get_analysis():
             "attack_detected": False
         }), 500
 
+PORT = 3600
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3600, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)

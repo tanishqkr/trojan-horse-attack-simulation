@@ -4,7 +4,7 @@ import json
 # Absolute path resolution assuming `monitor/logs_reader.py` relative to `data/attack_log.json`
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
-LOG_FILE = os.path.join(PROJECT_ROOT, "data", "attack_log.json")
+LOG_FILE = os.path.join(PROJECT_ROOT, "trojan", "data", "attack_log.json")
 
 def read_logs():
     """

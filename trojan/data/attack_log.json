@@ -4,3 +4,33 @@
 {"timestamp": "2026-04-08T15:59:50.942991", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/1127_the_belmont_report.pdf.enc", "status": "SUCCESS"}
 {"timestamp": "2026-04-08T15:59:50.943858", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/tuned_cm.png.enc", "status": "SUCCESS"}
 {"timestamp": "2026-04-08T15:59:50.944029", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1_locked", "status": "SUCCESS", "duration": 0.02, "total_files": 5}
+{"timestamp": "2026-04-08T23:52:12.793145", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/.DS_Store", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:52:12.795651", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/1127_the_belmont_report.pdf", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:52:12.811863", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:52:12.813185", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/tuned_cm.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:52:12.813981", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/70022300522.JPG", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:52:12.814317", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1", "status": "SUCCESS", "duration": 0.03, "total_files": 5}
+{"timestamp": "2026-04-08T23:53:33.964920", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/70022300522.JPG.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:53:33.965932", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/.DS_Store.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:53:33.974261", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:53:33.975881", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/1127_the_belmont_report.pdf.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:53:33.976584", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/tuned_cm.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:53:33.976800", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1_locked", "status": "SUCCESS", "duration": 0.01, "total_files": 5}
+{"timestamp": "2026-04-08T23:57:57.358647", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/.DS_Store", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:57:57.360870", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/1127_the_belmont_report.pdf", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:57:57.377809", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:57:57.379534", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/tuned_cm.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:57:57.380486", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/70022300522.JPG", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T23:57:57.380769", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1", "status": "SUCCESS", "duration": 0.03, "total_files": 5}
+{"timestamp": "2026-04-09T00:04:24.504310", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/70022300522.JPG.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:04:24.504867", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/.DS_Store.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:04:24.514259", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:04:24.516878", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/1127_the_belmont_report.pdf.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:04:24.517535", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/tuned_cm.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:04:24.517694", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1_locked", "status": "SUCCESS", "duration": 0.02, "total_files": 5}
+{"timestamp": "2026-04-09T00:05:37.937674", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/.DS_Store", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:05:37.939129", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/1127_the_belmont_report.pdf", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:05:37.947659", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:05:37.948452", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/tuned_cm.png", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:05:37.948946", "event": "FILE_DECRYPTED", "file": "/Users/tanishporwal/Desktop/demo1_locked/70022300522.JPG", "status": "SUCCESS"}
+{"timestamp": "2026-04-09T00:05:37.949112", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1", "status": "SUCCESS", "duration": 0.01, "total_files": 5}
