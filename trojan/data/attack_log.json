@@ -1,0 +1,6 @@
+{"timestamp": "2026-04-08T15:59:50.931353", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/70022300522.JPG.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T15:59:50.932308", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/.DS_Store.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T15:59:50.940858", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/DALL\u00b7E 2023-01-10 18.41.21 - a macro 35mm photograph of two mice in Hawaii, they're each wearing tiny swimsuits and are carrying tiny surf boards, digital art.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T15:59:50.942991", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/1127_the_belmont_report.pdf.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T15:59:50.943858", "event": "FILE_ENCRYPTED", "file": "/Users/tanishporwal/Desktop/demo1/tuned_cm.png.enc", "status": "SUCCESS"}
+{"timestamp": "2026-04-08T15:59:50.944029", "event": "FOLDER_RENAMED", "file": "/Users/tanishporwal/Desktop/demo1_locked", "status": "SUCCESS", "duration": 0.02, "total_files": 5}

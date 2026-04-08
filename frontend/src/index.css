@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30;
+  }
+}
+
+/* Custom glow animation for High alerts */
+@keyframes intense-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px 5px rgba(239, 68, 68, 0.8);
+  }
+}
+
+.animate-intense-pulse {
+  animation: intense-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
