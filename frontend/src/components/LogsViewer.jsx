@@ -4,8 +4,8 @@ import { format, parseISO } from 'date-fns';
 const LogsViewer = ({ logs }) => {
   if (!logs || logs.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl mt-6">
-        <p className="text-slate-500">System Logs Empty</p>
+      <div className="flex-1 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl">
+        <p className="text-slate-500 text-sm font-medium uppercase tracking-widest">System Logs Empty</p>
       </div>
     );
   }
@@ -14,24 +14,25 @@ const LogsViewer = ({ logs }) => {
   const sortedLogs = [...logs].reverse();
 
   return (
-    <div className="mt-6 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col h-[400px]">
-      <div className="p-4 border-b border-slate-800 bg-slate-900/50">
-        <h3 className="text-slate-400 text-sm font-medium uppercase tracking-wider">
-          Real-Time Telemetry Stream
+    <div className="flex-1 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col min-h-0">
+      <div className="px-4 py-2 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between">
+        <h3 className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
+          Real-Time System Telemetry
         </h3>
+        <span className="text-[9px] text-slate-500 font-mono">{logs.length} Total Signals</span>
       </div>
       
       <div className="overflow-x-auto overflow-y-auto flex-1 p-0 custom-scrollbar">
-        <table className="w-full text-left text-sm text-slate-400">
-          <thead className="bg-slate-900/80 sticky top-0 bg-opacity-95 backdrop-blur-sm z-10 text-xs uppercase text-slate-500">
+        <table className="w-full text-left text-[11px] text-slate-400 border-collapse">
+          <thead className="bg-slate-950 sticky top-0 z-10 text-[9px] uppercase text-slate-500 font-bold tracking-tighter">
             <tr>
-              <th className="px-4 py-3 font-medium">Timestamp</th>
-              <th className="px-4 py-3 font-medium">Event</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium w-full">Path/Details</th>
+              <th className="px-3 py-2 border-b border-slate-800">Timestamp</th>
+              <th className="px-3 py-2 border-b border-slate-800">Operation</th>
+              <th className="px-3 py-2 border-b border-slate-800">Status</th>
+              <th className="px-3 py-2 border-b border-slate-800 w-full">Endpoint Details</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800">
+          <tbody className="divide-y divide-slate-800/50">
             {sortedLogs.map((log, index) => {
               let statusColor = "text-slate-300";
               let statusBg = "bg-slate-800/50";
@@ -49,22 +50,21 @@ const LogsViewer = ({ logs }) => {
 
               let timeDisplay = log.timestamp;
               try {
-                timeDisplay = format(parseISO(log.timestamp), 'HH:mm:ss.SSS');
+                timeDisplay = format(parseISO(log.timestamp), 'HH:mm:ss.SS');
               } catch(e) {}
 
-              // Use file path or fallback to extracting err traces
-              const details = log.file || log.error || `[${log.event} trigger]`;
+              const details = log.file || log.error || `[${log.event}]`;
 
               return (
-                <tr key={index} className="hover:bg-slate-800/50 transition-colors">
-                  <td className="px-4 py-3 whitespace-nowrap font-mono text-xs">{timeDisplay}</td>
-                  <td className="px-4 py-3 whitespace-nowrap font-medium text-slate-300">{log.event}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold tracking-wide ${statusColor} ${statusBg}`}>
+                <tr key={index} className="hover:bg-slate-800/30 transition-colors">
+                  <td className="px-3 py-1.5 whitespace-nowrap font-mono text-[10px] opacity-70">{timeDisplay}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap font-bold text-slate-300 uppercase tracking-tighter">{log.event}</td>
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <span className={`px-1.5 py-0.5 rounded-sm text-[9px] font-black uppercase tracking-tighter ${statusColor} ${statusBg}`}>
                       {log.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-slate-500 truncate max-w-md" title={details}>
+                  <td className="px-3 py-1.5 font-mono text-[10px] text-slate-500 truncate max-w-xs xl:max-w-md" title={details}>
                     {details}
                   </td>
                 </tr>

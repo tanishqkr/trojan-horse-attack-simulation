@@ -12,27 +12,38 @@ from monitor import logs_reader
 
 def analyze_logs(logs):
     """
-    Analyzes log entries for specific Trojan behaviors.
-    Returns a dictionary of analysis metrics and classifications.
+    Analyzes log entries for specific Trojan behaviors with improved accuracy.
+    Handles unique file tracking, burst-based duration, and non-cumulative timeline.
     """
-    if not logs:
-        return {
-            "total_files": 0,
-            "time_taken": 0.0,
-            "alert_level": "LOW",
-            "risk_score": 0,
-            "summary": "No logs found. System is quiet.",
-            "attack_detected": False
-        }
+    # Base response schema for backward compatibility and clean UI startup
+    res = {
+        "total_files": 0,        # now = unique_files
+        "unique_files": 0,
+        "total_events": 0,
+        "attack_duration": 0.0,
+        "timeline": [],
+        "alert_level": "LOW",
+        "risk_score": 0,
+        "summary": "No logs found. System is quiet.",
+        "attack_detected": False,
+        "time_taken": 0.0        # preserved for legacy frontend calls
+    }
     
+    if not logs:
+        return res
+
     encrypt_timestamps = []
+    unique_paths = set()
+    total_events = 0
     error_count = 0
+    timeline_dict = {}
 
     for entry in logs:
         # Gracefully handle missing dictionary fields
         event = entry.get("event")
         status = entry.get("status")
         timestamp_str = entry.get("timestamp")
+        file_path = entry.get("file")
         
         if not event or not timestamp_str:
             continue
@@ -41,87 +52,106 @@ def analyze_logs(logs):
             error_count += 1
             
         if event == "FILE_ENCRYPTED" and status == "SUCCESS":
+            total_events += 1
+            if file_path:
+                unique_paths.add(file_path)
+            
             try:
                 # Parse ISO-8601 format timestamp
                 dtime = datetime.fromisoformat(timestamp_str)
                 encrypt_timestamps.append(dtime)
+                
+                # Prepare grouping for non-cumulative timeline (spikes) 
+                # Use full datetime (truncated to second) for robust sorting across day boundaries
+                time_key = dtime.replace(microsecond=0)
+                timeline_dict[time_key] = timeline_dict.get(time_key, 0) + 1
             except ValueError:
                 continue
 
     # Sort chronological encryption timestamps
     encrypt_timestamps.sort()
-    total_files = len(encrypt_timestamps)
+    unique_files_count = len(unique_paths)
     
-    if total_files == 0:
-        return {
-            "total_files": 0,
-            "time_taken": 0.0,
-            "alert_level": "LOW",
-            "risk_score": 0,
-            "summary": "No successful file encryptions observed.",
-            "attack_detected": False
-        }
-        
-    time_taken = (encrypt_timestamps[-1] - encrypt_timestamps[0]).total_seconds()
+    if total_events == 0:
+        res.update({
+            "unique_files": unique_files_count,
+            "total_events": total_events,
+            "summary": "System monitoring active. No threats detected." if error_count < 5 else "System errors observed, but no attack detected."
+        })
+        return res
+
+    # TASK 1: Detect last continuous attack burst (gap > 10s indicates separate session)
+    last_session = []
+    if encrypt_timestamps:
+        last_session = [encrypt_timestamps[0]]
+        for i in range(1, len(encrypt_timestamps)):
+            gap = (encrypt_timestamps[i] - encrypt_timestamps[i-1]).total_seconds()
+            if gap > 10:
+                last_session = [encrypt_timestamps[i]] # New session detected, reset to current burst
+            else:
+                last_session.append(encrypt_timestamps[i])
     
-    # Calculate Rapid Encryption (Max Files in any 5-second sliding window)
-    # NOTE: This uses O(n^2). For massive log scales, a two-pointer sliding window (O(n)) is optimal.
+    attack_duration = 0.0
+    if last_session:
+        attack_duration = (last_session[-1] - last_session[0]).total_seconds()
+
+    # TASK 3: Fix Graph Data (Non-cumulative, grouped by second)
+    # Sort by actual datetime objects to ensure correct chronological order
+    timeline_items = []
+    for dt, count in timeline_dict.items():
+        timeline_items.append({
+            "dt": dt,
+            "time": dt.strftime("%H:%M:%S"),
+            "count": count
+        })
+    
+    timeline_items.sort(key=lambda x: x["dt"])
+    timeline = [{"time": item["time"], "count": item["count"]} for item in timeline_items]
+
+    # Calculate Max burst in 5s (used in risk score)
     max_in_5s = 0
     for start_time in encrypt_timestamps:
-        # Count all timestamps within 5 seconds of the start_time
         count = sum(1 for dt in encrypt_timestamps if 0 <= (dt - start_time).total_seconds() <= 5)
         if count > max_in_5s:
             max_in_5s = count
 
-    # Determine alert level and base risk score
+    # TASK 4: New Risk Score Formula
+    calculated_risk = (unique_files_count * 5) + (max_in_5s * 6) + (error_count * 2)
+    risk_score = min(calculated_risk, 100)
+
+    # Determine alert level and summary
     alert_level = "LOW"
-    risk_score = min((total_files * 3) + (max_in_5s * 5) + (error_count * 2), 100)
-    summary = "Normal behavior detected. No major threats."
-
-    # Business Rules implementation
-    if total_files > 15:
-        # BULK ENCRYPTION DETECTED
+    summary = f"Minor file activity observed ({unique_files_count} unique files)."
+    
+    if risk_score >= 80 or unique_files_count > 15:
         alert_level = "HIGH"
-        summary = f"CRITICAL: Bulk Encryption Detected. {total_files} files encrypted."
-        risk_score = max(risk_score, 85)
-    elif max_in_5s > 5:
-        # RAPID ENCRYPTION DETECTED
+        summary = f"CRITICAL: Massive file encryption detected! {unique_files_count} files affected."
+    elif risk_score >= 40 or max_in_5s > 6:
         alert_level = "MEDIUM"
-        summary = f"WARNING: Rapid Encryption Detected. {max_in_5s} files encrypted in <=5 seconds."
-        risk_score = max(risk_score, 60)
-    elif total_files > 0:
-        # NORMAL / LOW BEHAVIOR
-        summary = f"Minor file encryption activity observed ({total_files} files)."
-        risk_score = max(risk_score, 10)
+        summary = f"WARNING: Suspicious encryption burst. {max_in_5s} events per 5s detected."
 
-    # Spike in errors modifier
-    if error_count > 5 and alert_level == "LOW":
-        summary = f"Suspicious system errors ({error_count}) combined with file activity."
-        risk_score = min(risk_score + 15, 100)
+    attack_detected = True if alert_level != "LOW" or risk_score > 30 else False
 
-    # Cap risk score just in case
-    risk_score = min(round(risk_score), 100)
-    attack_detected = True if alert_level != "LOW" else False
-
+    # TASK 5: Return updated response schema
     return {
-        "total_files": total_files,
-        "time_taken": round(time_taken, 2),
+        "total_files": unique_files_count, # Corrected existing field for compatibility
+        "unique_files": unique_files_count,
+        "total_events": total_events,
+        "attack_duration": round(attack_duration, 2),
+        "timeline": timeline,
         "alert_level": alert_level,
-        "risk_score": risk_score,
+        "risk_score": round(risk_score),
         "summary": summary,
-        "attack_detected": attack_detected
+        "attack_detected": attack_detected,
+        "time_taken": round((encrypt_timestamps[-1] - encrypt_timestamps[0]).total_seconds(), 2) # Preserve legacy duration
     }
 
 if __name__ == "__main__":
     logs = logs_reader.read_logs()
     analysis = analyze_logs(logs)
 
-    # Requested CLI Test Output
-    print(f"Total files encrypted: {analysis['total_files']}")
-    print(f"Time taken: {analysis['time_taken']} seconds")
-    print(f"ALERT LEVEL: {analysis['alert_level']}")
-    
-    # Bonus additions
+    print(f"Unique Files: {analysis['unique_files']}")
+    print(f"Total Events: {analysis['total_events']}")
+    print(f"Burst Duration: {analysis['attack_duration']} seconds")
     print(f"Risk Score: {analysis['risk_score']}%")
-    print(f"Summary: {analysis['summary']}")
-    print(f"Attack Detected: {analysis['attack_detected']}")
+    print(f"Alert Level: {analysis['alert_level']}")

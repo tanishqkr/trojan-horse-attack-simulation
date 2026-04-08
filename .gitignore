@@ -1,57 +1,25 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual Environments
-venv/
-.venv/
-ENV/
-
-# Node / Frontend
+# Node
 node_modules/
-frontend/dist/
-frontend/.env
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
 
-# Log files
-*.log
-# trojan/data/attack_log.json  # Uncomment to ignore simulated logs
+# Build outputs
+dist/
+build/
+*.spec
 
-# Security simulation artifacts
-*.enc
+# Packaged app (IMPORTANT)
+packaged_app/
 
-# OS files
+# Logs & runtime data
+data/
+trojan/data/
+*.json
+
+# Keys
+key.txt
+
+# OS
 .DS_Store
-Thumbs.db
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
