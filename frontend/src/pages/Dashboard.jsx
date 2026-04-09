@@ -78,15 +78,15 @@ const Dashboard = () => {
         
         {/* Top Row: Metrics and Status Summary */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 h-auto shrink-0">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-4">
             <AlertPanel alertLevel={analysis.alert_level} summary={analysis.summary} compact />
           </div>
-          <StatCard
+          {/* <StatCard
             title="Overall Risk Score"
             value={analysis.risk_score}
             alertLevel={analysis.alert_level}
             compact
-          />
+          /> */}
         </div>
 
         {/* Second Row: Detailed Stats */}

@@ -3,8 +3,8 @@ import time
 import argparse
 from cryptography.fernet import Fernet
 
-import utils
-import logger
+from . import utils
+from . import logger
 
 def encrypt_file(file_path, fernet):
     """

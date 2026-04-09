@@ -2,26 +2,25 @@ import os
 import json
 from datetime import datetime
 
-# Configure data directory and log file relative to this script
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(PROJECT_DIR, "data")
-LOG_FILE = os.path.join(DATA_DIR, "attack_log.json")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def _ensure_data_dir():
-    """Ensures the data directory exists."""
-    if not os.path.exists(DATA_DIR):
-        try:
-            os.makedirs(DATA_DIR)
-        except Exception as e:
-            print(f"[LOGGER ERROR] Failed to create data directory: {e}")
+DEV_PATH = os.path.join(BASE_DIR, "trojan", "data", "attack_log.json")
+PROD_PATH = os.path.expanduser("~/Desktop/cybersec_data/attack_log.json")
+
+def _write_to_path(path, data_str):
+    """Helper to write to a specific path, creating directories if needed."""
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "a") as f:
+            f.write(data_str + "\n")
+    except Exception as e:
+        print(f"[LOGGER ERROR] Failed to write to {path}: {e}")
 
 def log_event(event_type, file_path=None, status="SUCCESS", **kwargs):
     """
     Logs an event in structured JSON line format.
     Appends events line-by-line avoiding full file re-write.
     """
-    _ensure_data_dir()
-    
     try:
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -34,9 +33,11 @@ def log_event(event_type, file_path=None, status="SUCCESS", **kwargs):
         if kwargs:
             log_entry.update(kwargs)
             
-        with open(LOG_FILE, "a") as f:
-            f.write(json.dumps(log_entry) + "\n")
+        data_str = json.dumps(log_entry)
+        
+        _write_to_path(DEV_PATH, data_str)
+        _write_to_path(PROD_PATH, data_str)
             
     except Exception as e:
         # Fallback to prevent crash as per requirements
-        print(f"[LOGGER ERROR] Exception writing to log file: {str(e)}")
+        print(f"[LOGGER ERROR] Exception creating log entry: {str(e)}")

