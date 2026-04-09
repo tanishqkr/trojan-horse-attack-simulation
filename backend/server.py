@@ -3,7 +3,6 @@ import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-# Add root folder to sys.path so we can import 'monitor' package without Phase 1-3 modifications
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 if parent_dir not in sys.path:
@@ -17,7 +16,6 @@ except ImportError as e:
     sys.exit(1)
 
 app = Flask(__name__)
-# Enable CORS for all routes so our React dashboard can ingest metrics
 CORS(app)
 
 @app.route('/logs', methods=['GET'])
@@ -27,7 +25,6 @@ def get_logs():
         logs = logs_reader.read_logs()
         return jsonify(logs), 200
     except Exception as e:
-        # Failsafe fallback ensuring Valid JSON object always returned
         return jsonify([]), 500
 
 @app.route('/analysis', methods=['GET'])
@@ -38,7 +35,6 @@ def get_analysis():
         analysis = detector.analyze_logs(logs)
         return jsonify(analysis), 200
     except Exception as e:
-        # Failsafe dictionary mapping requested frontend fields
         return jsonify({
             "total_files": 0,
             "time_taken": 0.0,

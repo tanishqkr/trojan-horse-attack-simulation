@@ -29,7 +29,6 @@ def log_event(event_type, file_path=None, status="SUCCESS", **kwargs):
             "status": status
         }
         
-        # Include bonus fields like 'duration' or 'total_files'
         if kwargs:
             log_entry.update(kwargs)
             
@@ -39,5 +38,4 @@ def log_event(event_type, file_path=None, status="SUCCESS", **kwargs):
         _write_to_path(PROD_PATH, data_str)
             
     except Exception as e:
-        # Fallback to prevent crash as per requirements
         print(f"[LOGGER ERROR] Exception creating log entry: {str(e)}")

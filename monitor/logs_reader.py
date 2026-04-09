@@ -39,10 +39,8 @@ def read_logs():
     all_logs.extend(_read_from_path(DEV_PATH))
     all_logs.extend(_read_from_path(PROD_PATH))
 
-    # Deduplicate entries based on timestamp + file + event
     unique_logs = {}
     for entry in all_logs:
-        # Gracefully handle missing keys
         ts = entry.get("timestamp", "")
         evt = entry.get("event", "")
         fpath = entry.get("file", "")
@@ -51,7 +49,6 @@ def read_logs():
         
     deduplicated = list(unique_logs.values())
     
-    # Sort logs chronologically by timestamp
     deduplicated.sort(key=lambda x: x.get("timestamp", ""))
     
     return deduplicated

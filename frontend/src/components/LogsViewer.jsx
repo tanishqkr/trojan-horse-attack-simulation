@@ -10,7 +10,7 @@ const LogsViewer = ({ logs }) => {
     );
   }
 
-  // Reverse to show newest at the top
+
   const sortedLogs = [...logs].reverse();
 
   return (
